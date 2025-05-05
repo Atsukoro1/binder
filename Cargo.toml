@@ -1,0 +1,17 @@
+[package]
+name = "binder"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+object = "0.32"
+winapi = { version = "0.3.9", features = [
+    "processthreadsapi",
+    "winbase",
+    "memoryapi",
+    "winnt",
+] }
+
+[build-dependencies]
+object = { version = "0.32", features = ["write"] }
+rand = "0.8"
